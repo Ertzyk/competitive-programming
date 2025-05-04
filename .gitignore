@@ -79,4 +79,4 @@ build/
 .venv/
 venv/
 
-potyczki_algorytmiczne/tests/
+potyczki_algorytmiczne/cpp/tests/
