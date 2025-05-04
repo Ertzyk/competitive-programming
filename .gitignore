@@ -30,3 +30,51 @@
 *.exe
 *.out
 *.app
+
+# Python ignores
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+*.sqlite3
+
+# === IDE files ===
+.idea/
+.vscode/
+.cph/
+
+# === C/C++ build files ===
+*.o
+*.obj
+*.out
+*.exe
+*.ilk
+*.pdb
+*.d
+*.map
+*.lst
+
+# CMake artifacts
+cmake-build-*/
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+*.sqlite3
+.venv/
+venv/

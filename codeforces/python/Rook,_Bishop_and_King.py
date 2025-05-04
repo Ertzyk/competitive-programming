@@ -1,0 +1,2 @@
+r1, c1, r2, c2 = map(int, input().split())
+print(*[1 if r1 == r2 or c1 == c2 else 2, 0 if (r1 + c1)%2 != (r2 + c2)%2 else 1 if r1 - c1 == r2 - c2 or r1 + c1 == r2 + c2 else 2, max(abs(r1 - r2), abs(c1 - c2))])
