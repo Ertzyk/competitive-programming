@@ -78,3 +78,5 @@ build/
 *.sqlite3
 .venv/
 venv/
+
+potyczki_algorytmiczne/tests/
