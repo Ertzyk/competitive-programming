@@ -60,6 +60,10 @@ ll fast_exponentiation(ll a, ll b, ll m){
     return result;
 }
 
+ll inverse(ll a, ll m){
+    return fast_exponentiation(a, m - 2, m);
+}
+
 bool is_prime(const int x){
     for(int d = 2; d*d <= x; d++){
         if(x%d == 0){
