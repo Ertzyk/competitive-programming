@@ -60,6 +60,29 @@ ll fast_exponentiation(ll a, ll b, ll m){
     return result;
 }
 
+vector<vector<ll>> matrix_multiplication(vector<vector<ll>> A, vector<vector<ll>> B){
+    vector<vector<ll>> C(A.size(), vector<ll>(B[0].size(), 0));
+    for(int i = 0; i < A.size(); i++){
+        for(int j = 0; j < B[0].size(); j++){
+            for(int k = 0; k < B.size(); k++){
+                C[i][j] += A[i][k]*B[k][j];
+            }
+        }
+    }
+    return C;
+}
+
+vector<vector<ll>> binary_matrix_exponentiation(vector<vector<ll>> A, ll b){
+    vector<vector<ll>> result(A.size(), vector<ll>(A.size(), 0));
+    for(int i = 0; i < A.size(); i++) result[i][i] = 1;
+    while(b > 0){
+        if(b%2) result = matrix_multiplication(result, A);
+        A = matrix_multiplication(A, A);
+        b /= 2;
+    }
+    return result;
+}
+
 ll inverse(ll a, ll m){
     return fast_exponentiation(a, m - 2, m);
 }
