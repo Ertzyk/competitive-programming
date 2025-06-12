@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
+#include <string>
 using namespace std;
 using ll = long long;
 
@@ -94,6 +95,17 @@ bool is_prime(const int x){
         }
     }
     return true;
+}
+
+string bin(ll n, int width = 0){
+    string s;
+    do{
+        s += '0' + (n % 2);
+        n /= 2;
+    } while(n);
+    reverse(s.begin(), s.end());
+    while(s.size() < width) s = '0' + s;
+    return s;
 }
 
 class DSU{
