@@ -223,3 +223,22 @@ vector<int> restore_path(int s, int t, const vector<int>& p) {
     if(path[0] == s) return path;
     return {};
 }
+
+//Rabin-Karp algorithm
+
+vector<int> rabin_karp(string const& pattern, string const& text) {
+    if(pattern.size() > text.size()) return {};
+    int p = 31, m = 1e9 + 9;
+    vector<ll> p_pow(text.size()), h(text.size() + 1, 0);
+    p_pow[0] = 1; 
+    for(int i = 1; i < p_pow.size(); i++) p_pow[i] = (p_pow[i - 1]*p)%m;
+    for(int i = 0; i < text.size(); i++) h[i + 1] = (h[i] + (text[i] - 'a' + 1)*p_pow[i])%m; 
+    ll h_s = 0;
+    for(int i = 0; i < pattern.size(); i++) h_s = (h_s + (pattern[i] - 'a' + 1)*p_pow[i])%m; 
+    vector<int> occurrences;
+    for(int i = 0; i + pattern.size() - 1 < text.size(); i++) {
+        ll cur_h = (h[i + pattern.size()] + m - h[i])%m;
+        if(cur_h == h_s*p_pow[i]%m) occurrences.push_back(i);
+    }
+    return occurrences;
+}

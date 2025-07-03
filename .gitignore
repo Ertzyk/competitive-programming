@@ -80,3 +80,10 @@ build/
 venv/
 
 potyczki_algorytmiczne/cpp/tests/
+
+# Java build artifacts
+*.class
+
+# System files
+.DS_Store
+Thumbs.db
