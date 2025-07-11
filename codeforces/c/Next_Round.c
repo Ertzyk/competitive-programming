@@ -7,7 +7,7 @@ int max(int a, int b) {
 int main() {
     int n, k, result = 0;
     scanf("%d %d", &n, &k);
-    int a[n];
+    int a[50];
     for (int i = 0; i < n; i++) {
         scanf("%d", &a[i]);
     }
