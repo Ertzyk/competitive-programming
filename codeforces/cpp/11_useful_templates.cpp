@@ -242,3 +242,14 @@ vector<int> rabin_karp(string const& pattern, string const& text) {
     }
     return occurrences;
 }
+
+//Geometry
+
+bool is_colinear(vector<pair<int, int>> points){
+    if(points.size() < 3) return true;
+    for(int i = 2; i < points.size(); i++){
+        if((points[1].first - points[0].first)*(points[i].second - points[0].second) - 
+        (points[i].first - points[0].first)*(points[1].second - points[0].second) != 0) return false;
+    }
+    return true;
+}
