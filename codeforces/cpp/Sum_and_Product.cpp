@@ -1,5 +1,5 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <cmath>
 using namespace std;
 using ll = long long;
@@ -10,13 +10,15 @@ int main(){
     while(t--){
         int n, q;
         cin >> n;
-        map<ll, ll> hashmap;
+        unordered_map<ll, ll> hashmap;
+        hashmap.reserve(n);
         for(int i = 1; i <= n; i++){
             ll x;
             cin >> x;
             hashmap[x]++;
         }
         cin >> q;
+        hashmap.reserve(n + 2*q + 1);
         while(q--){
             ll x, y;
             cin >> x >> y;
