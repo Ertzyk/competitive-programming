@@ -1,30 +1,26 @@
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <climits>
 using namespace std;
 using ll = long long;
-
-ll llrand(){
-    return (((ll)rand()*(ll)RAND_MAX + (ll)rand())*(ll)RAND_MAX + (ll)rand())*(ll)RAND_MAX + (ll)rand();
-}
-
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    srand(time(0));
-    ll l = 3, r = 1000000000000000000, result = 3;
-    while(l <= r){
-        ll m = (3*l + 2*r)/5, response;
-        cout << "? " << m << ' ' << llrand()%(m - 1) + 1 << '\n';
+    for(ll i = 2; i <= 26; i++){
+        cout << "? 1 " << i << '\n';
         cout.flush();
-        cin >> response;
-        if(response == -1) r = m - 1;
-        else {
-            result = max(m, response + 1);
-            l = result + 1;
+        ll responce, responce2;
+        cin >> responce;
+        if(responce == -1){
+            cout << "! " << i - 1 << '\n';
+            return 0;
+        }
+        cout << "? " << i << " 1\n";
+        cout.flush();
+        cin >> responce2;
+        if(responce != responce2){
+            cout << "! " << responce + responce2 << '\n';
+            return 0;
         }
     }
-    cout << "! " << result;
+    cout << "! 27\n";
     return 0;
 }

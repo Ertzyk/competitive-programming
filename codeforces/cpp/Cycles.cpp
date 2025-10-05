@@ -30,7 +30,10 @@ int main(){
     cin.tie(0);
     int k;
     cin >> k;
-    cout << SIZE << '\n';
-    solve(k);
+    // cout << SIZE << '\n';
+    // solve(k);
+    for(int i = 3; i <= 100; i++){
+        cout << i << ": " << i*(i - 1)*(i - 2)/6 << ' ' << i*(i - 1)*(i - 2)/6 - (i - 2)*(i/2) << '\n';
+    }
     return 0;
 }

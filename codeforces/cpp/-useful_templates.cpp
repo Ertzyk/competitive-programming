@@ -86,6 +86,36 @@ class DSU{
     }
 };
 
+struct FenwickTree{
+    vector<int> bit;
+    int n;
+    FenwickTree(int n) : n(n), bit(n, 0) {}
+    FenwickTree(vector<int> const &a) : FenwickTree(a.size()){
+        for(int i = 0; i < n; i++){
+            bit[i] += a[i];
+            int next = i|(i + 1);
+            if(next < n) bit[next] += bit[i];
+        }
+    }
+    int sum(int r){
+        int res = 0;
+        while(r >= 0){
+            res += bit[r];
+            r = (r&(r + 1)) - 1;
+        }
+        return res;
+    }
+    int sum(int l, int r){
+        return sum(r) - sum(l - 1);
+    }
+    void add(int i, int delta){
+        while(i < n){
+            bit[i] += delta;
+            i |= (i + 1);
+        }
+    }
+};
+
 // Modular arithmetic
 
 int gcd(int a, int b){
