@@ -116,6 +116,42 @@ struct FenwickTree{
     }
 };
 
+struct FenwickTree2D{
+    vector<vector<int>> bit;
+    int n, m;
+    FenwickTree2D(int n, int m) : n(n), m(m), bit(n, vector<int>(m, 0)) {}
+    FenwickTree2D(vector<vector<int>> const &a) : FenwickTree2D(a.size(), a[0].size()){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                bit[i][j] += a[i][j];
+                int ii = i|(i + 1), jj = j|(j + 1);
+                if(ii < n) bit[ii][j] += bit[i][j];
+                if(jj < m) bit[i][jj] += bit[i][j];
+                if(ii < n && jj < m) bit[ii][jj] -= bit[i][j];
+            }
+        }
+    }
+    int sum(int x, int y) {
+        int res = 0;
+        for(int i = x; i >= 0; i = (i&(i + 1)) - 1){
+            for(int j = y; j >= 0; j = (j&(j + 1)) - 1){
+                res += bit[i][j];
+            }
+        }
+        return res;
+    }
+    int sum(int x1, int y1, int x2, int y2){
+        return sum(x2, y2) - sum(x1 - 1, y2) - sum(x2, y1 - 1) + sum(x1 - 1, y1 - 1);
+    }
+    void add(int x, int y, int delta){
+        for(int i = x; i < n; i = i|(i + 1)){
+            for(int j = y; j < m; j = j|(j + 1)){
+                bit[i][j] += delta;
+            }
+        }
+    }
+};
+
 // Modular arithmetic
 
 int gcd(int a, int b){
