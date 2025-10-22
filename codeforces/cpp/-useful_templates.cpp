@@ -224,6 +224,21 @@ bool is_prime(const int x){
     return true;
 }
 
+vector<ll> linear_sieve(ll n){
+    vector<ll> ld(n + 1, 0), pr;
+    for(ll i = 2; i <= n; i++){
+        if(ld[i] == 0){
+            ld[i] = i;
+            pr.push_back(i);
+        }
+        for(ll j = 0; pr[j]*i <= n; j++){
+            ld[pr[j]*i] = pr[j];
+            if(pr[j] == ld[i]) break;
+        }
+    }
+    return ld;
+}
+
 //integer to binary string
 
 string bin(ll n, int width = 0){
@@ -290,7 +305,7 @@ vector<int> restore_path(int s, int t, const vector<int>& p) {
     return {};
 }
 
-//Rabin-Karp algorithm
+// String algorithms
 
 vector<int> rabin_karp(string const& pattern, string const& text) {
     if(pattern.size() > text.size()) return {};
@@ -307,6 +322,17 @@ vector<int> rabin_karp(string const& pattern, string const& text) {
         if(cur_h == h_s*p_pow[i]%m) occurrences.push_back(i);
     }
     return occurrences;
+}
+
+vector<int> prefix_function(string s){
+    vector<int> pi(s.size());
+    for(int i = 1; i < s.size(); i++){
+        int j = pi[i - 1];
+        while(j > 0 && s[i] != s[j]) j = pi[j - 1];
+        if(s[i] == s[j]) j++;
+        pi[i] = j;
+    }
+    return pi;
 }
 
 //Geometry
