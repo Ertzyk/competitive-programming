@@ -4,43 +4,27 @@
 #include <algorithm>
 using namespace std;
 using ll = long long;
-
-struct FenwickTree{
-    vector<ll> bit;
-    ll n;
-    FenwickTree(ll n) : n(n), bit(n, 0) {}
-    ll sum(ll r){
-        ll res = 0;
-        while(r >= 0){
-            res += bit[r];
-            r = (r&(r + 1)) - 1;
-        }
-        return res;
-    }
-    void add(ll i, ll delta){
-        while(i < n){
-            bit[i] += delta;
-            i |= (i + 1);
-        }
-    }
-};
-
 int main(){
-    //UNFINISHED
     ios::sync_with_stdio(false);
     cin.tie(0);
-    ll n, result = 0;
+    int n;
     cin >> n;
     vector<ll> a(n);
     for(ll &x: a) cin >> x;
-    FenwickTree ft(n);
-    vector<pair<ll, ll>> negative;
-    for(int i = 0; i < n; i++){
-        if(a[i] >= 0){
-            result++;
-            ft.add(i, a[i]);
-        } else negative.push_back({a[i], i});
+    vector<vector<ll>> dp(n + 1, vector<ll>(n + 1, -1));
+    for(int i = 0; i <= n; i++) dp[i][0] = 0;
+    for(int i = 1; i <= n; i++){
+        for(int k = 1; k <= i; k++){
+            if(dp[i - 1][k - 1] == -1) dp[i][k] = -1;
+            else if(dp[i - 1][k] == -1){
+                dp[i][k] = dp[i - 1][k - 1] + a[i - 1];
+                if(dp[i][k] < 0) dp[i][k] = -1;
+            } else dp[i][k] = max(dp[i - 1][k], dp[i - 1][k - 1] + a[i - 1]);
+        }
     }
-    sort(negative.rbegin(), negative.rend());
+    for(int i = n; i >= 0; i--) if(dp[n][i] != -1){
+        cout << i << '\n';
+        break;
+    }
     return 0;
 }
