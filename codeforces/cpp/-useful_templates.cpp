@@ -239,7 +239,7 @@ vector<ll> linear_sieve(ll n){
     return ld;
 }
 
-//integer to binary string
+// Binary functions
 
 string bin(ll n, int width = 0){
     string s;
@@ -250,6 +250,15 @@ string bin(ll n, int width = 0){
     reverse(s.begin(), s.end());
     while(s.size() < width) s = '0' + s;
     return s;
+}
+
+int hamming_weight(int n){
+    int cnt = 0;
+    while(n > 0){
+        n &= n - 1;
+        cnt++;
+    }
+    return cnt;
 }
 
 // Kruskal's algorithm
