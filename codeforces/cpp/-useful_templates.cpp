@@ -154,6 +154,15 @@ struct FenwickTree2D{
     }
 };
 
+struct SegmentTree{
+    int n;
+    vector<ll> tree;
+    SegmentTree(int n) : n(n) {
+        tree.resize(4*n);
+    }
+    
+};
+
 // Modular arithmetic
 
 int gcd(int a, int b){
