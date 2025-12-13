@@ -27,20 +27,30 @@ int main(){
     return 0;
 }
 
+#include <iostream>
+using namespace std;
+using ll = long long;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
+    return 0;
+}
+
 // Custom Data Structures
 
 struct MinStack{
-    stack<pair<int, int>> st;
+    stack<pair<int, int>> stk;
     void add(int new_elem){
-        st.push({new_elem, st.empty() ? new_elem : min(new_elem, st.top().second)});
+        stk.push({new_elem, stk.empty() ? new_elem : min(new_elem, stk.top().second)});
     }
     int remove(){
-        int removed_element = st.top().first;
-        st.pop();
+        int removed_element = stk.top().first;
+        stk.pop();
         return removed_element;
     }
     int minimum(){
-        return st.top().second;
+        return stk.top().second;
     }
 };
 
