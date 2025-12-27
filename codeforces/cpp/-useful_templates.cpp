@@ -260,6 +260,44 @@ vector<ll> linear_sieve(ll n){
     return ld;
 }
 
+bool is_quadratic_residue(ll a, ll p){
+    a %= p; 
+    if(a < 0) a += p;
+    if(a == 0 || p == 2) return true;
+    return fast_exponentiation(a, (p - 1)/2, p) == 1;
+}
+
+ll tonelli_shanks(ll a, ll p){
+    a %= p; 
+    if(a < 0) a += p;
+    if(p == 2) return a;
+    if(a == 0) return 0;
+    if(!is_quadratic_residue(a, p)) return -1;
+    if(p%4 == 3) return fast_exponentiation(a, (p + 1)/4, p);
+    ll q = p - 1;
+    int s = 0;
+    while((q & 1) == 0){
+        q >>= 1;
+        s++;
+    }
+    ll z = 2;
+    while(is_quadratic_residue(z, p)) z++;
+    ll c = fast_exponentiation(z, q, p), x = fast_exponentiation(a, (q + 1)/2, p), t = fast_exponentiation(a, q, p), m = s;
+    while(t != 1){
+        ll i = 0, tt = t, b = c;
+        while(tt != 1){
+            tt = tt*tt%p;
+            i++;
+        }
+        for(int j = 0; j < m - i - 1; j++) b = b*b%p;
+        x = x*b%p;
+        t = t*b%p*b%p;
+        c = b*b%p;
+        m = i;
+    }
+    return x;
+}
+
 // Binary functions
 
 string bin(ll n, int width = 0){
