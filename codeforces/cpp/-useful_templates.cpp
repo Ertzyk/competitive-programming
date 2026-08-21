@@ -403,7 +403,7 @@ vector<int> prefix_function(string s){
     return pi;
 }
 
-//Geometry
+// Geometry
 
 bool is_colinear(vector<pair<int, int>> points){
     if(points.size() < 3) return true;
@@ -412,4 +412,29 @@ bool is_colinear(vector<pair<int, int>> points){
         (points[i].first - points[0].first)*(points[1].second - points[0].second) != 0) return false;
     }
     return true;
+}
+
+// Game Theory
+
+// Game on arbitrary graph
+vector<vector<int>> adj_rev;
+
+vector<bool> winning;
+vector<bool> losing;
+vector<bool> visited;
+vector<int> degree;
+
+void dfs(int v) {
+    visited[v] = true;
+    for (int u : adj_rev[v]) {
+        if (!visited[u]) {
+            if (losing[v])
+                winning[u] = true;
+            else if (--degree[u] == 0)
+                losing[u] = true;
+            else
+                continue;
+            dfs(u);
+        }
+    }
 }
