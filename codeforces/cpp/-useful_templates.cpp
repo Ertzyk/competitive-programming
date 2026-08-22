@@ -164,6 +164,50 @@ struct FenwickTree2D{
     }
 };
 
+struct SparseTable{
+    int n;
+    vector<vector<int>> st;
+    int K; 
+    vector<int> lg;
+
+    SparseTable(const vector<int>& a){
+        n = (int)a.size();
+        lg.resize(n + 1);
+        lg[1] = 0;
+        for(int i = 2; i <= n; i++) lg[i] = lg[i/2] + 1;
+        K = lg[n];
+        st.resize(K + 1);
+        st[0] = a; 
+        for(int i = 1; i <= K; i++){
+            st[i].resize(n - (1 << i) + 1);
+            for(int j = 0; j + (1 << i) <= n; j++){
+                st[i][j] = f(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
+            }
+        }
+    }
+
+    ll sum(int L, int R){
+        ll ans = 0;
+        for(int i = K; i >= 0; i--){
+            if((1 << i) <= R - L + 1){
+                ans += st[i][L];
+                L += 1 << i;
+            }
+        }
+        return ans;
+    }
+
+    int minimum(int L, int R){
+        int i = lg[R - L + 1];
+        return min(st[i][L], st[i][R - (1 << i) + 1]);
+    }
+
+    int f(int a, int b){
+        return a + b; 
+        // return min(a, b);
+    }
+};
+
 struct SegmentTree{
     int n;
     vector<ll> tree;
