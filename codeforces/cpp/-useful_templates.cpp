@@ -208,13 +208,184 @@ struct SparseTable{
     }
 };
 
-struct SegmentTree{
-    int n;
-    vector<ll> tree;
-    SegmentTree(int n) : n(n) {
-        tree.resize(4*n);
+// Segment Trees
+
+// Simple form (sum, min, max, gcd, lcm, ...)
+
+struct SegmentTree {
+    ll n;
+    vector<ll> t;
+
+    SegmentTree (ll m){
+        n = m;
+        t.assign(4*m, 0);
     }
-    
+
+    void build(const vector<ll>& a){
+        build(a, 1, 0, n - 1);
+    }
+
+    void update(ll pos, ll new_val) {
+        update(1, 0, n - 1, pos, new_val);
+    }
+
+    ll sum(ll l, ll r) {
+        return sum(1, 0, n - 1, l, r);
+    }
+
+    ll minimum(ll l, ll r){
+        return minimum(1, 0, n - 1, l, r);
+    }
+
+    void build(const vector<ll>& a, ll v, ll tl, ll tr) {
+        if(tl == tr){
+            t[v] = a[tl];
+        } else {
+            ll tm = (tl + tr)/2;
+            build(a, v*2, tl, tm);
+            build(a, v*2 + 1, tm + 1, tr);
+            t[v] = t[v*2] + t[v*2 + 1];
+            // t[v] = min(t[v*2] + t[v*2 + 1]);
+        }
+    }
+
+    void update(ll v, ll tl, ll tr, ll pos, ll new_val) {
+        if(tl == tr){
+            t[v] = new_val;
+        } else {
+            ll tm = (tl + tr)/2;
+            if(pos <= tm) update(v*2, tl, tm, pos, new_val);
+            else update(v*2 + 1, tm + 1, tr, pos, new_val);
+            t[v] = t[2*v] + t[2*v + 1];
+            // t[v] = min(t[v*2] + t[v*2 + 1]);
+        }
+    }
+
+    ll sum(ll v, ll tl, ll tr, ll l, ll r){
+        if(l > tr || r < tl) return 0;
+        if(l <= tl && tr <= r) return t[v];
+        ll tm = (tl + tr)/2;
+        return sum(v*2, tl, tm, l, r) + sum(v*2 + 1, tm + 1, tr, l, r);
+    }
+
+    ll minimum(ll v, ll tl, ll tr, ll l, ll r){
+        if(l <= tl && r >= tr) return t[v];
+        if(l > tr || r < tl) return LLONG_MAX;
+        ll tm = (tl + tr)/2;
+        return min(minimum(2*v, tl, tm, l, r), minimum(2*v + 1, tm + 1, tr, l, r));
+    }
+};
+
+// Addition on segments
+
+struct SegmentTree2 {
+    ll n;
+    vector<ll> t;
+
+    SegmentTree2(ll k){
+        n = k;
+        t.assign(4*k, 0);
+    }
+
+    void build(const vector<ll>& a){
+        build(a, 1, 0, n - 1);
+    }
+
+    void update(ll l, ll r, ll add){
+        update(1, 0, n - 1, l, r, add);
+    }
+
+    ll get(ll pos){
+        return get(1, 0, n - 1, pos);
+    }
+
+    void build(const vector<ll>& a, ll v, ll tl, ll tr){
+        if(tl == tr){
+            t[v] = a[tl];
+        } else {
+            ll tm = (tl + tr)/2;
+            build(a, 2*v, tl, tm);
+            build(a, 2*v + 1, tm + 1, tr);
+            t[v] = 0;
+        }
+    }
+
+    void update(ll v, ll tl, ll tr, ll l, ll r, ll add){
+        if(l > tr || r < tl) return;
+        if(l <= tl && r >= tr){
+            t[v] += add;
+            return;
+        }
+        ll tm = (tl + tr)/2;
+        update(2*v, tl, tm, l, r, add);
+        update(2*v + 1, tm + 1, tr, l, r, add);
+    }
+
+    ll get(ll v, ll tl, ll tr, ll pos){
+        if(tl == tr) return t[v];
+        ll tm = (tl + tr)/2;
+        if(pos <= tm) return get(2*v, tl, tm, pos) + t[v];
+        return get(2*v + 1, tm + 1, tr, pos) + t[v];
+    }
+};
+
+// Assignment on segments
+
+struct SegmentTree3 {
+    ll n;
+    vector<ll> t;
+    vector<bool> marked;
+
+    SegmentTree3(ll k){
+        n = k;
+        t.assign(4*k, 0);
+        marked.assign(4*k, false);
+    }
+
+    void build(ll v, ll tl, ll tr){
+        if(tl == tr){
+            t[v] = 0;
+            marked[v] = true;
+        } else {
+            ll tm = (tl + tr)/2;
+            build(2*v, tl, tm);
+            build(2*v + 1, tm + 1, tr);
+            t[v] = 0;
+        }
+    }
+
+    void update(ll v, ll tl, ll tr, ll l, ll r, ll new_val){
+        if(l > tr || r < tl) return;
+        if(l <= tl && r >= tr){
+            t[v] = new_val;
+            marked[v] = true;
+        } else {
+            push(v);
+            ll tm = (tl + tr)/2;
+            update(2*v, tl, tm, l, r, new_val);
+            update(2*v + 1, tm + 1, tr, l, r, new_val);
+        }
+    }
+
+    void push(ll v){
+        if(marked[v]){
+            t[2*v] = t[2*v + 1] = t[v];
+            marked[2*v] = marked[2*v + 1] = true;
+            marked[v] = false;
+        }
+    }
+
+    ll get(ll v, ll tl, ll tr, ll pos){
+        if(tl == tr){
+            return t[v];
+        } else {
+            if(marked[v]) return t[v];
+            // push(v);
+            ll tm = (tl + tr)/2;
+            if(pos <= tm) return get(2*v, tl, tm, pos);
+            return get(2*v + 1, tm + 1, tr, pos);
+        }
+    }
 };
 
 // Modular arithmetic
