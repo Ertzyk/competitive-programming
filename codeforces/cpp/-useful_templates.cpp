@@ -607,15 +607,30 @@ vector<int> rabin_karp(string const& pattern, string const& text) {
     return occurrences;
 }
 
-vector<int> prefix_function(string s){
-    vector<int> pi(s.size());
-    for(int i = 1; i < s.size(); i++){
-        int j = pi[i - 1];
+vector<ll> prefix_function(string s){
+    ll n = s.size();
+    vector<ll> pi(n, 0);
+    for(ll i = 1; i < n; i++){
+        ll j = pi[i - 1];
         while(j > 0 && s[i] != s[j]) j = pi[j - 1];
         if(s[i] == s[j]) j++;
         pi[i] = j;
     }
     return pi;
+}
+
+vector<ll> z_function(string s){
+    ll n = s.size(), l = 0, r = 0;
+    vector<ll> z(n, 0);
+    for(ll i = 1; i < n; i++){
+        if(i < r) z[i] = min(r - i, z[i - l]);
+        while(i + z[i] < n && s[z[i]] == s[i + z[i]]) z[i]++;
+        if(i + z[i] > r){
+            l = i;
+            r = i + z[i];
+        }
+    }
+    return z;
 }
 
 // Geometry
